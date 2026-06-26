@@ -4,7 +4,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from backend.config import REPORTS_DIR
+from config import REPORTS_DIR
 
 def generate_pdf_report(patient_id, session_date, filename, prediction, confidence, prob_depressed, duration):
     """
