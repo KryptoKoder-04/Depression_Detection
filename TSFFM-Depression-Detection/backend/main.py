@@ -4,8 +4,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from backend.config import REPORTS_DIR
-from backend.api.predict import router as predict_router
+from config import REPORTS_DIR
+from api.predict import router as predict_router
 
 
 
