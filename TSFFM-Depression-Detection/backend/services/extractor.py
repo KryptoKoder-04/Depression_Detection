@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import mediapipe as mp
-from backend.config import SEQUENCE_LENGTH, FPS
+from config import SEQUENCE_LENGTH, FPS
 
 def normalize_landmarks(seq):
     """
