@@ -1,0 +1,17 @@
+================ EVALUATION METRICS ================
+Accuracy : 37.86%
+Precision: 0.2447
+Recall   : 0.6090
+F1-Score : 0.3491
+AUC-ROC  : 0.4287
+====================================================
+
+Classification Report:
+               precision    recall  f1-score   support
+
+Not Depressed       0.66      0.29      0.41       353
+    Depressed       0.24      0.61      0.35       133
+
+     accuracy                           0.38       486
+    macro avg       0.45      0.45      0.38       486
+ weighted avg       0.55      0.38      0.39       486

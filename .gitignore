@@ -1,0 +1,27 @@
+# Python virtual environments & caches
+venv/
+env/
+.env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables
+.env
+.env.local
+
+# Logs
+*.log
+install_output.txt
+
+# Node modules and builds
+node_modules/
+dist/
+build/
+
+# Editor files
+.vscode/
+
+# OS specific
+.DS_Store
+Thumbs.db

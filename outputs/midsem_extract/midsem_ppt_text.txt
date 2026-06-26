@@ -1,0 +1,481 @@
+Source PPTX: C:\Users\jiten\Downloads\TSFFM_Depression_Detection (1).pptx
+Slides extracted: 22
+
+--- Slide 1 ---
+Depression Detection
+using Two-Stream Feature Fusion Model
+(TSFFM)
+Presented By
+Kabir Singh Khair  (22BEC061)
+Jitendra Singh Choudhary  (22BEC059)
+Supervisor: Dr. Amit Vishwakarma
+PDPM IIITDM Jabalpur
+BTP Mid-Term •  Electronics & Communication Engineering
+
+--- Slide 2 ---
+Problem Statement
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+280M+
+people affected by depression worldwide (WHO, 2023)
+70%
+cases go undiagnosed due to stigma and lack of access
+17 yrs
+average delay between onset of symptoms and treatment
+Limitations of Traditional Diagnosis
+Relies on self-reporting — patients often underreport symptoms
+Clinical interviews are subjective and time-intensive
+Limited access to mental health professionals in rural areas
+No scalable, objective, real-time diagnostic tool currently exists
+
+--- Slide 3 ---
+Motivation
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Early Detection Saves Lives
+Timely intervention prevents escalation to severe depression
+Reduces suicide risk significantly
+Improves long-term treatment outcomes
+AI for Mental Healthcare
+Deep learning can identify subtle behavioral patterns
+Non-invasive and scalable across populations
+Complements clinical tools without replacing doctors
+Video as Rich Signal
+Facial expressions reflect internal emotional states
+Body posture conveys affect and energy levels
+Multimodal signals are more reliable than single modality
+
+--- Slide 4 ---
+Objectives
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+01
+Detect depression automatically from video recordings using deep learning
+02
+Design a Two-Stream CNN model to extract facial and body posture features
+03
+Fuse multimodal features for improved classification accuracy
+04
+Classify subjects into Depressed or Non-Depressed categories
+05
+Evaluate the model using confidence scores and softmax probabilities
+
+--- Slide 5 ---
+Background: Understanding Depression
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+What is Depression?
+A common but serious mood disorder affecting feelings, thoughts, and daily activities
+Classified as Major Depressive Disorder (MDD) by DSM-5
+Symptoms persist for at least two weeks to be clinically significant
+Affects people across all age groups and demographics
+Observable Behavioral Indicators
+Facial:
+Flat affect, reduced smiling, averted gaze
+Posture:
+Slumped shoulders, reduced gesturing, slow movement
+Speech:
+Monotone voice, slowed speech, long pauses
+Psychomotor:
+Agitation or retardation in physical movement
+
+--- Slide 6 ---
+Literature Review
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Modality
+Key Approach
+Limitation
+Speech Analysis
+Acoustic features (pitch, tone, energy)
+Requires audio; environment-dependent
+Facial Expression
+Action Units (AUs) via OpenFace, CNN
+Ignores body language cues
+Body Posture
+Skeleton tracking, joint angles
+Misses facial emotional context
+Multimodal (EEG)
+Physiological signals fusion
+Requires specialized hardware
+Proposed: TSFFM
+Face + Body CNN fusion from video
+No special hardware; rich signals
+
+--- Slide 7 ---
+Limitations of Existing Methods
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Single Modality Weakness
+Relying solely on face OR body leads to incomplete depression assessment. Each modality captures only part of the clinical picture.
+Subjectivity in Labeling
+Many datasets use clinician ratings which can vary. Self-report datasets suffer from response bias and underreporting.
+Limited Dataset Availability
+Depression datasets are scarce due to ethical constraints and privacy concerns. Most datasets are small (< 500 subjects).
+Computational Complexity
+Complex models with multiple modalities (audio, video, EEG) require high computational resources, limiting real-world deployment.
+Generalizability Issues
+Models trained on one demographic often fail to generalize to different cultures, age groups, or genders.
+
+--- Slide 8 ---
+Proposed Solution: Two-Stream Feature Fusion Model
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+The TSFFM simultaneously processes two types of visual information from the same video — facial expressions and body posture — through separate CNN streams, then fuses them to make a holistic depression prediction.
+Stream 1: Facial
+Detects and crops face region
+CNN extracts expression features
+Encodes emotion: sadness, flatness, gaze
+Stream 2: Body
+MediaPipe pose estimation
+Skeleton joint coordinates
+Encodes posture: slump, energy, movement
+FUSION →
+Classification
+
+--- Slide 9 ---
+System Pipeline
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+▶
+Video
+Input
+1
+▶
+Frame
+Extraction
+2
+▶
+Face
+Detection
+3
+▶
+Pose
+Estimation
+4
+▶
+CNN Feature
+Extraction
+5
+▶
+Feature
+Fusion
+6
+▶
+FC
+Classifier
+7
+Depression
+Prediction
+8
+Class 0: No Depression
+41.67%
+Softmax Probability
+Class 1: Depression
+58.33%
+Softmax Probability
+
+--- Slide 10 ---
+Model Architecture: TSFFM
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Video
+Input
+Face
+Detect
+Resize
+224×224
+CNN
+Stream 1
+Feature
+Vec F1
+Facial Stream
+Pose
+Estimate
+Keypoint
+Vectors
+CNN
+Stream 2
+Feature
+Vec F2
+Body Stream
+Feature
+Fusion
+(Concat)
+GAP
+FC
+128→2
+Softmax
+Output
+Facial Stream
+Body Stream
+Fusion
+Output
+
+--- Slide 11 ---
+Data Preprocessing
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Step 1
+Frame Extraction
+Input video loaded using OpenCV (cv2.VideoCapture)
+Frames extracted at uniform intervals (e.g., every 5th frame)
+Reduces redundancy while retaining temporal diversity
+Extracted frames stored as NumPy arrays for processing
+Step 2
+Face Detection
+OpenCV Haar Cascade or DNN-based face detector applied
+Bounding box coordinates extracted for face region
+Face region cropped and resized to 224×224 pixels
+Normalized pixel values to [0,1] range for CNN input
+Step 3
+Pose Estimation
+MediaPipe Holistic model applied to each frame
+Extracts 33 body landmark coordinates (x, y, z, visibility)
+Landmarks flattened into a 132-dimensional feature vector
+Handles occlusion and missing keypoints gracefully
+
+--- Slide 12 ---
+Facial Stream: Emotion Feature Extraction
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Face Region
+(224×224 RGB)
+→
+Conv Layers
+(ReLU + BN)
+→
+MaxPooling
+Layers
+→
+Feature
+Maps
+→
+Feature
+Vector F1
+What does the Facial Stream learn?
+Emotional Flatness:
+Reduced facial expressivity; minimal smiling or eyebrow movement
+Gaze Aversion:
+Avoidance of direct eye contact, a common indicator of low affect
+Psychomotor Retardation:
+Slowed facial muscle movements visible in frame-level analysis
+Sadness / Distress Markers:
+Downturned corners of mouth, furrowed brow, downcast eyes
+
+--- Slide 13 ---
+Body Stream: Posture Feature Extraction
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Pose
+Keypoints (33)
+→
+Normalize
+& Stack
+→
+1D Conv
+Layers
+→
+Feature
+Maps
+→
+Feature
+Vector F2
+MediaPipe Pose Landmarks
+33 body landmarks with (x, y, z, visibility) coordinates
+Key joints: shoulders, elbows, wrists, hips, knees, ankles
+Flattened to 132-dimensional vector per frame
+Multiple frames averaged for temporal stability
+Depression-Related Posture Cues
+Slumped shoulders and forward-leaning head
+Reduced arm and hand gesturing
+Low energy posture: collapsed trunk, inward limbs
+Psychomotor retardation visible in movement patterns
+
+--- Slide 14 ---
+Feature Fusion: Combining Streams
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+F1 (Facial Features)
+[Tensor: N × 256]
+F2 (Body Features)
+[Tensor: N × 256]
+Concatenate
+[N × 512]
+Global Avg
+Pooling
+FC Layer
+128 → 2
+(Softmax)
+Why Feature Concatenation?
+Preserves all information from both streams — no information loss compared to averaging
+Allows the classifier to independently weight face vs. body features based on context
+Results in a richer 512-dimensional joint representation for improved classification
+
+--- Slide 15 ---
+Model Details & Specifications
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Component
+Details
+Output Shape
+Architecture
+Two-Stream CNN (TSFFM)
+—
+Facial Stream Input
+224 × 224 × 3 (RGB image)
+224 × 224 × 3
+Body Stream Input
+MediaPipe 33 landmarks × 4
+132-D vector
+CNN Backbone
+Custom lightweight CNN (Conv + ReLU + BN + Pool)
+Feature maps
+Feature Vector (Face)
+F1 after CNN extraction
+N × 256
+Feature Vector (Body)
+F2 after CNN extraction
+N × 256
+Fusion Method
+Concatenation of F1 and F2
+N × 512
+Pooling
+Global Average Pooling (GAP)
+512-D vector
+FC Classifier
+Linear: 512 → 128 → 2
+2 logits
+Activation
+Softmax on output layer
+2 probabilities
+Classes
+0 = No Depression, 1 = Depression
+Binary
+Loss Function
+Cross-Entropy Loss
+Scalar
+Training Epochs
+5 epochs
+—
+Device
+CPU
+—
+
+--- Slide 16 ---
+Implementation: Tools & Technologies
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Python 3.x
+Core Programming Language
+Primary language for all model development, preprocessing, and inference pipelines
+PyTorch
+Deep Learning Framework
+Used for defining CNN layers, training loop, loss computation, and model inference
+OpenCV
+Computer Vision Library
+Frame extraction from video, face detection using Haar cascades / DNN, image preprocessing
+MediaPipe
+Pose Estimation
+Google's real-time body landmark detection for extracting 33 pose keypoints per frame
+NumPy
+Numerical Computing
+Array operations, data normalization, feature vector manipulation and stacking
+
+--- Slide 17 ---
+Results: Inference Output
+⚠  Depression Detected
+Class 0
+No Depression
+41.67%
+Softmax Probability
+Class 1
+Depression
+58.33%
+Softmax Probability
+Model Confidence: 58.33%  |  Training: 5 Epochs  |  Device: CPU
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+
+--- Slide 18 ---
+Result Analysis & Interpretation
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+Key Observations
+Confidence of 58.33% is above the 50% decision threshold — Depression is predicted
+Margin of 16.66% between classes is moderate — room for improved training
+Only 5 training epochs; more epochs expected to improve confidence
+Both streams contributed to the final decision (multimodal advantage)
+CPU inference is feasible, showing lightweight model design
+Decision Rule: argmax(Softmax outputs) → Class 1 (Depression) when P(Class 1) > P(Class 0)
+
+--- Slide 19 ---
+Challenges Encountered
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+01
+Dataset Limitations
+Depression datasets are scarce and ethically constrained. Most publicly available datasets (DAIC-WOZ, AVEC) are small and have strict access controls. This limits model generalizability and increases overfitting risk.
+02
+Computational Constraints
+Training deep CNNs on CPU is slow. Limited GPU access meant fewer training epochs (5) were feasible. This reduces the model's convergence and confidence in predictions.
+03
+Synchronization Complexity
+Aligning the facial and body streams temporally is challenging. Dropped frames, detection failures, or frame skipping can introduce mismatches between the two streams.
+04
+Occlusion & Detection Failures
+Faces or body parts may be partially visible or out of frame. OpenCV face detection and MediaPipe can fail under poor lighting, extreme angles, or fast movement.
+
+--- Slide 20 ---
+Future Work & Enhancements
+PDPM IIITDM Jabalpur | Depression Detection using TSFFM
+1
+Larger & Diverse Datasets
+Incorporate DAIC-WOZ, AVEC, and AVEC-2019 datasets for training on clinically validated depression data across diverse demographics and age groups.
+2
+Temporal Modeling with RNN/LSTM
+Replace frame-level CNN with sequence-aware models (LSTM, GRU, Transformer) to capture temporal depression patterns across video sequences.
+3
+Real-Time Deployment
+Optimize the model using TensorRT or ONNX for real-time inference on edge devices, enabling clinical screening tools on smartphones or kiosks.
+4
+Add Audio Stream
+Incorporate speech features (pitch, energy, pauses) as a third stream, creating a true multimodal fusion system for higher accuracy.
+5
+Clinical Validation
+Partner with psychiatrists to validate model outputs against PHQ-9 scores and DSM-5 criteria. Conduct blind trials on patient cohorts.
+
+--- Slide 21 ---
+Conclusion
+1
+Designed and implemented a Two-Stream Feature Fusion Model (TSFFM) for automated depression detection from video
+2
+The model successfully fuses facial expression features and body posture features using CNN-based parallel streams
+3
+Inference result shows Depression Detected with 58.33% confidence — demonstrating functional model capability
+4
+The pipeline is fully non-invasive, requiring only a standard video camera — no specialized hardware needed
+5
+Future enhancements include temporal modeling, larger datasets, and real-time clinical deployment
+6
+TSFFM represents a meaningful step toward AI-assisted mental health screening at scale
+
+--- Slide 22 ---
+TSFFM
+Depression Detection Model
+Thank You!
+Kabir Singh Khair [22BEC061]
+Jitendra Singh Choudhary [22BEC059]
+PDPM IIITDM Jabalpur
+B.Tech — Electronics & Communication Engineering
+
+--- Media files ---
+ppt/media/image1.png
+ppt/media/image10.png
+ppt/media/image11.png
+ppt/media/image12.png
+ppt/media/image13.png
+ppt/media/image14.png
+ppt/media/image15.png
+ppt/media/image16.png
+ppt/media/image17.png
+ppt/media/image18.png
+ppt/media/image19.png
+ppt/media/image2.jpg
+ppt/media/image20.png
+ppt/media/image21.png
+ppt/media/image22.png
+ppt/media/image23.png
+ppt/media/image24.png
+ppt/media/image25.png
+ppt/media/image26.png
+ppt/media/image27.png
+ppt/media/image3.png
+ppt/media/image4.png
+ppt/media/image5.png
+ppt/media/image6.png
+ppt/media/image7.png
+ppt/media/image8.png
+ppt/media/image9.png

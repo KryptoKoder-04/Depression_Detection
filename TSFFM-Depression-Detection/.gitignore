@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+dist/
+build/
+
+# Python virtual environments & caches
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env/
+
+# Environment Variables
+.env
+.env.local
+
+# ML Model Weights & Large files
+*.pt
+*.pth
+*.h5
+*.onnx
+weights/
+
+# Temporary directories and logs
+*.log
+uploads/
+reports/
+
+# OS specific
+.DS_Store
+Thumbs.db
