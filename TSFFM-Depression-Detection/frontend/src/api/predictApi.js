@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_URL = "https://depression-detection-46s2.onrender.com";
 
 /**
  * Uploads a video file and associated metadata to the backend for depression detection.
