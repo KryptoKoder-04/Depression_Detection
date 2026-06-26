@@ -2,10 +2,10 @@ import os
 import time
 from datetime import datetime
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException
-from backend.config import UPLOADS_DIR, ALLOWED_EXTENSIONS
-from backend.services.extractor import extract_features_from_video
-from backend.services.inference import run_inference
-from backend.services.pdf_report import generate_pdf_report
+from config import UPLOADS_DIR, ALLOWED_EXTENSIONS
+from services.extractor import extract_features_from_video
+from services.inference import run_inference
+from services.pdf_report import generate_pdf_report
 
 router = APIRouter(prefix="/api")
 
