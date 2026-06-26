@@ -1,7 +1,7 @@
 import os
 import sys
 import torch
-from backend.config import PROJECT_ROOT, MODEL_WEIGHTS_PATH
+from config import PROJECT_ROOT, MODEL_WEIGHTS_PATH
 
 # Add ML directory to python path for model importing
 sys.path.append(PROJECT_ROOT)
